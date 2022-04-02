@@ -22,7 +22,7 @@ std::string readFile(std::string file){
     return cur_string;
 }
 
-enum token{src, arg, lib, out, gxx};
+enum token{src, arg, lib, out, gxx, nocomp};
 
 struct Token{token t; std::string data;};
 
@@ -86,6 +86,7 @@ std::vector<Token> tokenize(std::vector<std::string> calls){
                     if (col == "GXX" || col == "OUTPUT"){
                         j=i; 
                         while ( j >= 0 && file.at(j) != '\n'){ j++; if (file.at(j) != ' ' && file.at(j) != '\n') t.data += file.at(j);}
+                        if (col == "GXX" && t.data == "NO-COMP") t.t=nocomp;
                         output.insert(output.end(),t); t={}; col="";
                     } 
                     else if (col != ""){
