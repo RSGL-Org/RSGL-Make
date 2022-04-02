@@ -15,7 +15,6 @@ macos{
     SOURCE += source/macos/*.cpp
 }
 otherMethod{
-    SOURCE += source/optional/*.cpp
     bash{
         echo $(NEWVAR)
     }
