@@ -22,6 +22,7 @@ std::string readFile(std::string file){
     return cur_string;
 }
 
+std::vector<std::string> acmds;
 enum token{src, arg, lib, out, gxx, nocomp};
 
 struct Token{token t; std::string data;};
@@ -106,6 +107,14 @@ std::vector<Token> tokenize(std::vector<std::string> calls){
                     while (j2 < file.size() && file.at(j2) != '}'){
                         if (file.at(j2) != '\n') col+= file.at(j2);
                         else {system(col.data()); col = "";}
+                        j2++;
+                    }
+                }
+                else if (col == "pash"){
+                    col = ""; int j2=i+1;
+                    while (j2 < file.size() && file.at(j2) != '}'){
+                        if (file.at(j2) != '\n') col+= file.at(j2);
+                        else {acmds.insert(acmds.end(),col); col = "";}
                         j2++;
                     }
                 }

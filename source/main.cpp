@@ -21,4 +21,5 @@ int main(int argc, char** argv){
         std::string cmd = compiler + source + args + libs + "-o " + output;
         system(cmd.data());
     }
+    for (int i=0; i < acmds.size(); i++) system(acmds.at(i).data());
 }
