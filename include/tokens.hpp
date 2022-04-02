@@ -76,6 +76,7 @@ std::vector<Token> tokenize(){
                 if (file.at(i-5) + file.at(i-4) + file.at(i-3) + file.at(i-2) + file.at(i-1)+"" == "bash"){
 
                 } break;*/
+            case '{': break; 
             default: break;
         }
     }
