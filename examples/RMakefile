@@ -5,22 +5,22 @@ OUTPUT = OUTPUT
 GXX = g++
 NEWVAR = yay
 
-/*
-^^^ everything above this works
-new ideas to be added 
-
 win32{
     SOURCE += source/windows/*.cpp
 }
 linux{
     SOURCE += source/linux/*.cpp
 }
+macos{
+    SOURCE += source/macos/*.cpp
+}
 otherMethod{
     SOURCE += source/optional/*.cpp
-    bash:
+    bash{
         echo $(NEWVAR)
+    }
 }
 
-bash:
+bash{
     echo finished
-*/
+}
