@@ -12,11 +12,12 @@ build:
 install:
 	$(GXX) $(SOURCE) -o $(OUTPUT)
 	sudo cp $(OUTPUT) $(BINPATH)
-	cp -r rsglmake-vscode $(VSCPATH)extensions
 
 localInstall:
 	$(GXX) $(SOURCE) -o $(OUTPUT)
 	#cp $(OUTPUT) $(LOCALBINPATH)
+	
+vscode:
 	cp -rrsglmake-vscode $(VSCPATH)\extensions
 	
 example:
