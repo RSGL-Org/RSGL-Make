@@ -18,7 +18,7 @@ localInstall:
 	#cp $(OUTPUT) $(LOCALBINPATH)
 	
 vscode:
-	cp -rrsglmake-vscode $(VSCPATH)\extensions
+	cp -r rsglmake-vscode $(VSCPATH)\extensions
 	
 example:
 	$(GXX) $(SOURCE) -o $(OUTPUT)
