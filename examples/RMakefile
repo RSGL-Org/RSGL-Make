@@ -24,6 +24,8 @@ otherMethod{
 
 e = 4
 
+
+
 bash{
     echo $(ARG)
     echo $(GXX)

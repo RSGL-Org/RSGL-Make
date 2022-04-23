@@ -22,4 +22,4 @@ int main(int argc, char** argv){
         system(cmd.data());
     }
     for (int i=0; i < acmds.size(); i++) system(acmds.at(i).data());
-}
+} 

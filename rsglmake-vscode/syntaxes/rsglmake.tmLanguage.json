@@ -1,0 +1,713 @@
+{
+	"information_for_contributors": [
+		"This file has been converted from https://github.com/fadeevab/make.tmbundle/blob/master/Syntaxes/rsglmake.plist",
+		"If you want to provide a fix or improvement, please create a pull request against the original repository.",
+		"Once accepted there, we are happy to receive an update request."
+	],
+	"version": "https://github.com/fadeevab/make.tmbundle/commit/91b724d1ad86fa65e4b240a960311a280b92f971",
+	"name": "RSGLMake",
+	"scopeName": "RMakefile",
+	"patterns": [
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#terms"
+		},
+		{
+			"include": "#comment"
+		},
+		{
+			"include": "#variables"
+		},
+		{
+			"include": "#variable-assignment"
+		},
+		{
+			"include": "#directives"
+		},
+		{
+			"include": "#recipe"
+		},
+		{
+			"include": "#target"
+		}
+	],
+	"repository": {
+		"comments": {
+			"patterns": [
+				{
+					"captures": {
+						"0": {
+							"name": "punctuation.definition.comment.java"
+						}
+					},
+					"match": "/\\*\\*/",
+					"name": "comment.block.empty.java"
+				},
+				{
+					"include": "#comments-inline"
+				}
+			]
+		},
+		"comments-inline": {
+			"patterns": [
+				{
+					"begin": "//\\*",
+					"captures": {
+						"0": {
+							"name": "punctuation.definition.comment.java"
+						}
+					},
+					"end": "\\*/",
+					"name": "comment.block.java"
+				},
+				{
+					"begin": "(^[ \\t]+)?(?=//)",
+					"beginCaptures": {
+						"1": {
+							"name": "punctuation.whitespace.comment.leading.java"
+						}
+					},
+					"end": "(?!\\G)",
+					"patterns": [
+						{
+							"begin": "//",
+							"beginCaptures": {
+								"0": {
+									"name": "punctuation.definition.comment.java"
+								}
+							},
+							"end": "\\n",
+							"name": "comment.line.double-slash.java"
+						}
+					]
+				}
+			]
+		},
+		"terms": {
+			"patterns": [
+				{
+					"name": "entity.name.type.language.myscript",
+					"match": "SOURCE|OUTPUT|ARGS|LIBS|GXX"
+				}
+			]
+		},
+		"comment": {
+			"begin": "(^[ ]+)?(?=//)",
+			"beginCaptures": {
+				"1": {
+					"name": "punctuation.whitespace.comment.leading.rsglmake"
+				}
+			},
+			"end": "(?!\\G)",
+			"patterns": [
+				{
+					"begin": "//",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.definition.comment.rsglmake"
+						}
+					},
+					"end": "(?=[^\\\\])$",
+					"name": "comment.line.number-sign.rsglmake",
+					"patterns": [
+						{
+							"match": "\\\\\\n",
+							"name": "constant.character.escape.continuation.rsglmake"
+						}
+					]
+				}
+			]
+		},
+		"directives": {
+			"patterns": [
+				{
+					"begin": "^[ ]*([s\\-]?include)\\b",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.control.include.rsglmake"
+						}
+					},
+					"end": "^",
+					"patterns": [
+						{
+							"include": "#comment"
+						},
+						{
+							"include":"#terms"
+						},
+						{
+							"include": "#variables"
+						},
+						{
+							"match": "%",
+							"name": "constant.other.placeholder.rsglmake"
+						}
+					]
+				},
+				{
+					"begin": "^[ ]*(vpath)\\b",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.control.vpath.rsglmake"
+						}
+					},
+					"end": "^",
+					"patterns": [
+						{
+							"include": "#comment"
+						},
+						{
+							"include":"#terms"
+						},
+						{
+							"include": "#variables"
+						},
+						{
+							"match": "%",
+							"name": "constant.other.placeholder.rsglmake"
+						}
+					]
+				},
+				{
+					"begin": "^\\s*(?:(override)\\s*)?(define)\\s*([^\\s]+)\\s*(=|\\?=|:=|\\+=)?(?=\\s)",
+					"captures": {
+						"1": {
+							"name": "keyword.control.override.rsglmake"
+						},
+						"2": {
+							"name": "keyword.control.define.rsglmake"
+						},
+						"3": {
+							"name": "variable.other.rsglmake"
+						},
+						"4": {
+							"name": "punctuation.separator.key-value.rsglmake"
+						}
+					},
+					"end": "^\\s*(endef)\\b",
+					"name": "meta.scope.conditional.rsglmake",
+					"patterns": [
+						{
+							"begin": "\\G(?!\\n)",
+							"end": "^",
+							"patterns": [
+								{
+									"include": "#comment"
+								}
+							]
+						},
+						{
+							"include":"#terms"
+						},
+						{
+							"include": "#variables"
+						},
+						{
+							"include": "#directives"
+						}
+					]
+				},
+				{
+					"begin": "^[ ]*(export)\\b",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.control.$1.rsglmake"
+						}
+					},
+					"end": "^",
+					"patterns": [
+						{
+							"include": "#comment"
+						},
+						{
+							"include": "#variable-assignment"
+						},
+						{
+							"match": "[^\\s]+",
+							"name": "variable.other.rsglmake"
+						}
+					]
+				},
+				{
+					"begin": "^[ ]*(override|private)\\b",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.control.$1.rsglmake"
+						}
+					},
+					"end": "^",
+					"patterns": [
+						{
+							"include": "#comment"
+						},
+						{
+							"include": "#variable-assignment"
+						}
+					]
+				},
+				{
+					"begin": "^[ ]*(unexport|undefine)\\b",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.control.$1.rsglmake"
+						}
+					},
+					"end": "^",
+					"patterns": [
+						{
+							"include": "#comment"
+						},
+						{
+							"match": "[^\\s]+",
+							"name": "variable.other.rsglmake"
+						}
+					]
+				},
+				{
+					"begin": "^\\s*(ifeq|ifneq|ifdef|ifndef)(?=\\s)",
+					"captures": {
+						"1": {
+							"name": "keyword.control.$1.rsglmake"
+						}
+					},
+					"end": "^\\s*(endif)\\b",
+					"name": "meta.scope.conditional.rsglmake",
+					"patterns": [
+						{
+							"begin": "\\G",
+							"end": "^",
+							"name": "meta.scope.condition.rsglmake",
+							"patterns": [
+								{
+									"include": "#variables"
+								},
+								{
+									"include": "#comment"
+								}
+							]
+						},
+						{
+							"begin": "^\\s*else(?=\\s)",
+							"beginCaptures": {
+								"0": {
+									"name": "keyword.control.else.rsglmake"
+								}
+							},
+							"end": "^",
+							"patterns": [
+								{
+									"include": "#variables"
+								},
+								{
+									"include": "#comment"
+								}
+							]
+						},
+						{
+							"include": "$self"
+						}
+					]
+				}
+			]
+		},
+		"target": {
+			"begin": "^(?!\\t)([^{]*)({)(?!\\=)",
+			"beginCaptures": {
+				"1": {
+					"patterns": [
+						{
+							"captures": {
+								"1": {
+									"name": "support.function.target.$1.rsglmake"
+								}
+							},
+							"match": "^\\s*(\\.(PHONY|SUFFIXES|DEFAULT|PRECIOUS|INTERMEDIATE|SECONDARY|SECONDEXPANSION|DELETE_ON_ERROR|IGNORE|LOW_RESOLUTION_TIME|SILENT|EXPORT_ALL_VARIABLES|NOTPARALLEL|ONESHELL|POSIX))\\s*$"
+						},
+						{
+							"begin": "(?=\\S)",
+							"end": "(?=\\s|$)",
+							"name": "entity.name.function.target.rsglmake",
+							"patterns": [
+								{
+									"include": "#variables"
+								},
+								{
+									"match": "%",
+									"name": "constant.other.placeholder.rsglmake"
+								}
+							]
+						}
+					]
+				},
+				"2": {
+					"name": "punctuation.separator.key-value.rsglmake"
+				}
+			},
+			"end": "[^\\\\]$",
+			"name": "meta.scope.target.rsglmake",
+			"patterns": [
+				{
+					"begin": "\\G",
+					"end": "(?=[^\\\\])$",
+					"name": "meta.scope.prerequisites.rsglmake",
+					"patterns": [
+						{
+							"match": "\\\\\\n",
+							"name": "constant.character.escape.continuation.rsglmake"
+						},
+						{
+							"match": "%|\\*",
+							"name": "constant.other.placeholder.rsglmake"
+						},
+						{
+							"include": "#comment"
+						},
+						{
+							"include": "#variables"
+						}
+					]
+				}
+			]
+		},
+		"recipe": {
+			"begin": "^\\t([+\\-@]*)",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.control.$1.rsglmake"
+				}
+			},
+			"end": "[^\\\\]$",
+			"name": "meta.scope.recipe.rsglmake",
+			"patterns": [
+				{
+					"match": "\\\\\\n",
+					"name": "constant.character.escape.continuation.rsglmake"
+				},
+				{
+					"include": "#variables"
+				}
+			]
+		},
+		"variable-assignment": {
+			"begin": "(^[ ]*|\\G\\s*)([^\\s:#=]+)\\s*((?<![?:+!])=|\\?=|:=|\\+=|!=)",
+			"beginCaptures": {
+				"2": {
+					"name": "variable.other.rsglmake",
+					"patterns": [
+						{
+							"include": "#variables"
+						}
+					]
+				},
+				"3": {
+					"name": "punctuation.separator.key-value.rsglmake"
+				}
+			},
+			"end": "\\n",
+			"patterns": [
+				{
+					"match": "\\\\\\n",
+					"name": "constant.character.escape.continuation.rsglmake"
+				},
+				{
+					"include": "#comment"
+				},
+				{
+					"include": "#variables"
+				}
+			]
+		},
+		"interpolation": {
+			"patterns": [
+				{
+					"include": "#parentheses-interpolation"
+				},
+				{
+					"include": "#braces-interpolation"
+				}
+			]
+		},
+		"parentheses-interpolation": {
+			"begin": "\\(",
+			"end": "\\)",
+			"patterns": [
+				{
+					"include": "#variables"
+				},
+				{
+					"include": "#interpolation"
+				}
+			]
+		},
+		"braces-interpolation": {
+			"begin": "{",
+			"end": "}",
+			"patterns": [
+				{
+					"include": "#variables"
+				},
+				{
+					"include": "#interpolation"
+				}
+			]
+		},
+		"variables": {
+			"patterns": [
+				{
+					"include": "#simple-variable"
+				},
+				{
+					"include": "#variable-parentheses"
+				},
+				{
+					"include": "#variable-braces"
+				}
+			]
+		},
+		"simple-variable": {
+			"patterns": [
+				{
+					"match": "\\$[^(){}]",
+					"name": "variable.language.rsglmake"
+				}
+			]
+		},
+		"variable-parentheses": {
+			"patterns": [
+				{
+					"begin": "\\$\\(",
+					"captures": {
+						"0": {
+							"name": "punctuation.definition.variable.rsglmake"
+						}
+					},
+					"end": "\\)|((?<!\\\\)\\n)",
+					"name": "string.interpolated.rsglmake",
+					"patterns": [
+						{
+							"include":"#terms"
+						},
+						{
+							"include": "#variables"
+						},
+						{
+							"include": "#builtin-variable-parentheses"
+						},
+						{
+							"include": "#function-variable-parentheses"
+						},
+						{
+							"include": "#flavor-variable-parentheses"
+						},
+						{
+							"include": "#another-variable-parentheses"
+						}
+					]
+				}
+			]
+		},
+		"variable-braces": {
+			"patterns": [
+				{
+					"begin": "\\${",
+					"captures": {
+						"0": {
+							"name": "punctuation.definition.variable.rsglmake"
+						}
+					},
+					"end": "}|((?<!\\\\)\\n)",
+					"name": "string.interpolated.rsglmake",
+					"patterns": [
+						{
+							"include":"#terms"
+						},
+						{
+							"include": "#variables"
+						},
+						{
+							"include": "#builtin-variable-braces"
+						},
+						{
+							"include": "#function-variable-braces"
+						},
+						{
+							"include": "#flavor-variable-braces"
+						},
+						{
+							"include": "#another-variable-braces"
+						}
+					]
+				}
+			]
+		},
+		"builtin-variable-parentheses": {
+			"patterns": [
+				{
+					"match": "(?<=\\()(rsglmakeS|VPATH|SHELL|MAKESHELL|MAKE|MAKELEVEL|MAKEFLAGS|MAKECMDGOALS|CURDIR|SUFFIXES|\\.LIBPATTERNS)(?=\\s*\\))",
+					"name": "variable.language.rsglmake"
+				}
+			]
+		},
+		"builtin-variable-braces": {
+			"patterns": [
+				{
+					"match": "(?<={)(rsglmakeS|VPATH|SHELL|MAKESHELL|MAKE|MAKELEVEL|MAKEFLAGS|MAKECMDGOALS|CURDIR|SUFFIXES|\\.LIBPATTERNS)(?=\\s*})",
+					"name": "variable.language.rsglmake"
+				}
+			]
+		},
+		"function-variable-parentheses": {
+			"patterns": [
+				{
+					"begin": "(?<=\\()(subst|patsubst|strip|findstring|filter(-out)?|sort|word(list)?|firstword|lastword|dir|notdir|suffix|basename|addsuffix|addprefix|join|wildcard|realpath|abspath|info|error|warning|shell|foreach|if|or|and|call|eval|value|file|guile)\\s",
+					"beginCaptures": {
+						"1": {
+							"name": "support.function.$1.rsglmake"
+						}
+					},
+					"end": "(?=\\)|((?<!\\\\)\\n))",
+					"name": "meta.scope.function-call.rsglmake",
+					"patterns": [
+						{
+							"include":"#terms"
+						},
+						{
+							"include": "#variables"
+						},
+						{
+							"include": "#interpolation"
+						},
+						{
+							"match": "%|\\*",
+							"name": "constant.other.placeholder.rsglmake"
+						},
+						{
+							"match": "\\\\\\n",
+							"name": "constant.character.escape.continuation.rsglmake"
+						}
+					]
+				}
+			]
+		},
+		"function-variable-braces": {
+			"patterns": [
+				{
+					"begin": "(?<={)(subst|patsubst|strip|findstring|filter(-out)?|sort|word(list)?|firstword|lastword|dir|notdir|suffix|basename|addsuffix|addprefix|join|wildcard|realpath|abspath|info|error|warning|shell|foreach|if|or|and|call|eval|value|file|guile)\\s",
+					"beginCaptures": {
+						"1": {
+							"name": "support.function.$1.rsglmake"
+						}
+					},
+					"end": "(?=}|((?<!\\\\)\\n))",
+					"name": "meta.scope.function-call.rsglmake",
+					"patterns": [
+												{
+							"include":"#terms"
+						},
+						{
+							"include": "#variables"
+						},
+						{
+							"include": "#interpolation"
+						},
+						{
+							"match": "%|\\*",
+							"name": "constant.other.placeholder.rsglmake"
+						},
+						{
+							"match": "\\\\\\n",
+							"name": "constant.character.escape.continuation.rsglmake"
+						}
+					]
+				}
+			]
+		},
+		"flavor-variable-parentheses": {
+			"patterns": [
+				{
+					"begin": "(?<=\\()(origin|flavor)\\s(?=[^\\s)]+\\s*\\))",
+					"contentName": "variable.other.rsglmake",
+					"beginCaptures": {
+						"1": {
+							"name": "support.function.$1.rsglmake"
+						}
+					},
+					"end": "(?=\\))",
+					"name": "meta.scope.function-call.rsglmake",
+					"patterns": [
+						{
+							"include": "terms"
+						},
+						{
+							"include": "#variables"
+						}
+					]
+				}
+			]
+		},
+		"flavor-variable-braces": {
+			"patterns": [
+				{
+					"begin": "(?<={)(origin|flavor)\\s(?=[^\\s}]+\\s*})",
+					"contentName": "variable.other.rsglmake",
+					"beginCaptures": {
+						"1": {
+							"name": "support.function.$1.rsglmake"
+						}
+					},
+					"end": "(?=})",
+					"name": "meta.scope.function-call.rsglmake",
+					"patterns": [
+						{
+							"include": "#variables"
+						}
+					]
+				}
+			]
+		},
+		"another-variable-parentheses": {
+			"patterns": [
+				{
+					"begin": "(?<=\\()(?!\\))",
+					"end": "(?=\\)|((?<!\\\\)\\n))",
+					"name": "variable.other.rsglmake",
+					"patterns": [
+						{
+							"include":"#terms"
+						},
+						{
+							"include": "#variables"
+						},
+						{
+							"match": "\\\\\\n",
+							"name": "constant.character.escape.continuation.rsglmake"
+						}
+					]
+				}
+			]
+		},
+		"another-variable-braces": {
+			"patterns": [
+				{
+					"begin": "(?<={)(?!})",
+					"end": "(?=}|((?<!\\\\)\\n))",
+					"name": "variable.other.rsglmake",
+					"patterns": [
+												{
+							"include":"#terms"
+						},
+						{
+							"include": "#variables"
+						},
+						{
+							"match": "\\\\\\n",
+							"name": "constant.character.escape.continuation.rsglmake"
+						}
+					]
+				}
+			]
+		}
+	}
+}

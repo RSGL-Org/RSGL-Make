@@ -1,0 +1,26 @@
+{
+    "name": "rsglmake-vscode",
+    "displayName": "RSGLMake-vscode",
+    "description": "RSGLMake support for vscode",
+    "version": "0.0.1",
+    "icon":"icon.png",
+    "engines": {
+        "vscode": "^1.66.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "rsglmake",
+            "aliases": ["RSGLMake", "rsglmake"],
+            "extensions": ["RMakefile"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "rsglmake",
+            "scopeName": "RMakefile",
+            "path": "./syntaxes/rsglmake.tmLanguage.json"
+        }]
+    }
+}
