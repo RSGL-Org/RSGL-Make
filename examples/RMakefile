@@ -25,11 +25,15 @@ otherMethod{
 e = 4
 
 !path(./test){
-    echo There is no test file
+    bash{
+        echo There is no test file
+    }
 }
 
 path(./include){
-    echo There is a include folder
+    bash{
+        echo There is a include folder
+    }
 }
 
 bash{

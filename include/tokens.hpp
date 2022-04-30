@@ -50,13 +50,13 @@ void fillVars(int start=0){
 }
 
 std::vector<Token> tokenize(std::vector<std::string> calls){
-    std::vector<Token> output;
-    int j; std::string col; bool ta=false; Token t;
+    std::vector<Token> output; 
+    int j; std::string col; bool ta=false; Token t; 
     for (int i=0; i < file.size(); i++){
         switch(file.at(i)){
             case '/': 
-                if (file.size() > i+1 && file.at(i+1) == '/'){while (i < file.size() && file.at(i) != '\n') i++;} 
-                else if (file.size() > i+1 && file.at(i+1) == '*'  &&  i == 0 || file.at(i-1) == '\n'){while (i+1 < file.size() && file.at(i)+file.at(i+1)+"" != "*/") i++;}
+                if (file.size() > i+2 && file.at(i+1) == '/' && !file.at(i+2) == '*'){while (i < file.size() && file.at(i) != '\n') i++;} 
+                else if (file.size() > i+2 && file.at(i+1) == '/' &&  i == 0 || file.at(i-1) == '\n'){while (i+1 < file.size() && file.at(i)+file.at(i+1)+"" != "*/") i++;}
                 break;
             case '=':
                 if (i >= 1 && file.at(i-1) == '+'){
@@ -183,31 +183,25 @@ std::vector<Token> tokenize(std::vector<std::string> calls){
                 while ( j-1 >= 0 && file.at(j) != '\n'){ j--; if (file.at(j) == ' ' && t.data.size() || file.at(j) != ' ' && file.at(j) != '\n' ) col.insert(col.begin(),file.at(j));}
                 if (col.at(col.size()-1) == ')'){
                     std::string col2="";  std::string arg="";  bool nc=true;
-                    for (int j3=0; j3 < col.size(); j3++){
+                    for (int B=0; B < col.size(); B++){
                         if (!nc){
-                            if (col.at(j3) == ')') break;
-                            arg += col.at(j3);
+                            if (col.at(B) == ')') break;
+                            arg += col.at(B);
                         }
-                        if (col.at(j3) == '(' || col.at(j3) == ' ' || col.at(j3) == '\n') nc=false;
-                        if (nc) col2+=col.at(j3);
+                        if (col.at(B) == '(' || col.at(B) == ' ' || col.at(B) == '\n') nc=false;
+                        if (nc) col2+=col.at(B);
                     }
                     if (col2 == "!path" || col2 == "path"){
                         bool run=false;
                         struct stat buffer;
                         if (stat (arg.c_str(), &buffer) == 0 && col2 == "path") run=true;
                         if (!(stat (arg.c_str(), &buffer) == 0) && col2 == "!path") run=true;
-                        if (run){
-                            fillVars(j);
-                            col = ""; int j2=i+1;
-                            while (j2 < file.size() && file.at(j2) != '}'){
-                                if (file.at(j2) != '\n') col+= file.at(j2);
-                                else {system(col.data()); col = "";}
-                                j2++;
-                            }
-                        }
+                        
+                        if (!run){ while (i < file.size() && file.at(i) != '}') i++; }
                     }
                 }
-                if (col == "bash"){
+                else if (col == "bash"){
+                    
                     fillVars(j);
                     col = ""; int j2=i+1;
                     while (j2 < file.size() && file.at(j2) != '}'){
