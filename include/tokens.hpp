@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector> 
 #include <map>
+#include <sys/stat.h>
 
 #ifdef WIN32
    std::string os="win32";
@@ -180,6 +181,32 @@ std::vector<Token> tokenize(std::vector<std::string> calls){
             case '{': 
                 j=i; col="";
                 while ( j-1 >= 0 && file.at(j) != '\n'){ j--; if (file.at(j) == ' ' && t.data.size() || file.at(j) != ' ' && file.at(j) != '\n' ) col.insert(col.begin(),file.at(j));}
+                if (col.at(col.size()-1) == ')'){
+                    std::string col2="";  std::string arg="";  bool nc=true;
+                    for (int j3=0; j3 < col.size(); j3++){
+                        if (!nc){
+                            if (col.at(j3) == ')') break;
+                            arg += col.at(j3);
+                        }
+                        if (col.at(j3) == '(' || col.at(j3) == ' ' || col.at(j3) == '\n') nc=false;
+                        if (nc) col2+=col.at(j3);
+                    }
+                    if (col2 == "!path" || col2 == "path"){
+                        bool run=false;
+                        struct stat buffer;
+                        if (stat (arg.c_str(), &buffer) == 0 && col2 == "path") run=true;
+                        if (!(stat (arg.c_str(), &buffer) == 0) && col2 == "!path") run=true;
+                        if (run){
+                            fillVars(j);
+                            col = ""; int j2=i+1;
+                            while (j2 < file.size() && file.at(j2) != '}'){
+                                if (file.at(j2) != '\n') col+= file.at(j2);
+                                else {system(col.data()); col = "";}
+                                j2++;
+                            }
+                        }
+                    }
+                }
                 if (col == "bash"){
                     fillVars(j);
                     col = ""; int j2=i+1;
