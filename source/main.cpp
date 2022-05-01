@@ -4,7 +4,7 @@
 int main(int argc, char** argv){
     std::vector<std::string> calls; bool project=false;
 
-    std::vector<std::string> size; std::string name; bool noRSGL=false; bool postRun=false;
+    std::vector<std::string> size; std::string name; bool noRSGL=false; bool postRun=false; bool help=false;
     //RSGLMake -project -size=500,500,500,500 -name=name -noRSGL -postRun
     for (int i=1; i < argc; i++){ 
         std::string str = argv[i];
@@ -28,6 +28,10 @@ int main(int argc, char** argv){
             }  
             if (str == "-noRSGL") noRSGL=true;
             if (str == "-postRun") postRun=true;
+            if (str == "-help"){
+                std::cout << "-name : the name of the project (required)\n-size : the size of the window (required for an RSGL project)\n-noRSGL : if the project is not an RSGL project\n-postRun : should the program auto run after you compile?\n-help : outputs al the arguments" << std::endl;
+                help=true; break;
+            }
         }
         if (str == "-project") project = true;
         if (!project) calls.insert(calls.end(),str);
@@ -52,7 +56,7 @@ int main(int argc, char** argv){
             system(cmd.data());
         }
         for (int i=0; i < acmds.size(); i++) system(acmds.at(i).data());
-    } else{
+    } else if (!help){
         std::string cmd = "mkdir " + name + " " + name + "/source " + name + "/include " + name + "/res"; system(cmd.c_str());
         std::string file = name + "/source/main.cpp"; FILE* f = fopen(file.c_str(),"w+");
         
