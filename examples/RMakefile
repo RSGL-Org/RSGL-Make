@@ -1,9 +1,11 @@
 SOURCE+=source/*.cpp
 ARGS += -g
-LIBS += -lRSGL
+LIBS +=     
 OUTPUT = OUTPUT
-GXX = g++
 NEWVAR = yay
+
+GXX ~= g++
+ARG !=
 
 win32{
     SOURCE += source/windows/*.cpp
@@ -20,6 +22,13 @@ otherMethod{
     }
 }
 
+e = 4
+
 bash{
+    echo $(ARG)
+    echo $(GXX)
+}
+
+pash{
     echo finished
 }
